@@ -1,0 +1,27 @@
+{
+  "name": "next-openai-starter",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A starter for Next.js with OpenAI",
+  "author": {
+    "name": "Patrick Craig",
+    "url": "https://www.linkedin.com/in/patrickacraig/",
+    "license": "MIT"
+  },
+  "scripts": {
+    "dev": "DEBUG=app,app:* next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "debug": "^4.3.4",
+    "dotenv": "^16.0.3",
+    "eslint": "8.36.0",
+    "eslint-config-next": "13.2.4",
+    "next": "13.2.4",
+    "openai": "^3.2.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  }
+}
