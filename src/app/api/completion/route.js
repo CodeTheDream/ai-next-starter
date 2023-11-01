@@ -8,7 +8,7 @@ export async function POST(req) {
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: messages,
-      temperature: 1,
+      temperature: 1.5,
       max_tokens: 256,
       top_p: 1,
       frequency_penalty: 0,

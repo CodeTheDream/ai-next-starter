@@ -17,7 +17,21 @@ import Dialog from "../../components/Dialog";
 import fetchEvaluation from "@/app/fetchCalls/fetchCompletion";
 
 export default function SystemContinuousCompletion() {
-  const initialConversation = [{ role: "system", content: "Act as Yoda" }];
+  const companyInfo = {
+    company_name: "Sweet Indulgence Inc.",
+    value_proposition:
+      "Providing a premium and diverse range of candies that caters to every taste bud, while promoting an enjoyable and memorable candy-eating experience.",
+    mission_statement:
+      "To create a world of pure imagination through our candies, prioritizing quality, variety and customer satisfaction while maintaining a commitment to ethical and sustainable business practices.",
+  };
+
+  const initialConversation = [
+    {
+      role: "system",
+      // content: `Act as customer support representative for ${companyInfo}, whenever customer asks certain flavor come up with various options`,
+      content: `Act as a customer support representative for ${companyInfo.company_name}, with the following mission: ${companyInfo.mission_statement}, please help our users find flavors to match their liking. For any flavor the customer asks you, come up with a candy that has that flavor. For candy, provide a name, as well as a short paragraph marketing description of the candy`,
+    },
+  ];
   const [chatHistory, setChatHistory] = useState(initialConversation);
 
   const [userInput, setUserInput] = useState("");
