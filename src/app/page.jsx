@@ -30,6 +30,11 @@ export default function Home() {
             System Chat
           </Button>
         </Link>
+        <Link href="/social-media-generator">
+          <Button variant="contained" sx={{ mb: 2 }}>
+            Social Media Generator
+          </Button>
+        </Link>
       </Box>
     </Box>
   );
