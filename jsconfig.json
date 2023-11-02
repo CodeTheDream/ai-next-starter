@@ -6,5 +6,6 @@
     "paths": {
       "@/*": ["./src/*"]
     }
-  }
+  },
+  "exclude": ["./src/app/api/completion/route.ts"]
 }
