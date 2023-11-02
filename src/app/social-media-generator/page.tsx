@@ -1,85 +1,82 @@
 "use client";
-import { useState,
-  // useEffect
-} from "react";
+import { useState } from "react";
 import Link from "next/link";
 import {
-  Button,
   Container,
+  Box,
+  Button,
   LinearProgress,
   Paper,
   TextField,
   Typography,
 } from "@mui/material";
-import ReactMarkdown from "react-markdown";
 import { companyInfo, companyReviews } from "../utils/data";
-// import Posts from "../components/Posts";
 
 export default function Page() {
-  const [date, setDate] = useState("");
-  const [info, setInfo] = useState("");
+  const [dateInput, setDateInput] = useState("");
   const [posts, setPosts] = useState([]);
-  const [userInput, setUserInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Set the generated text and watch for changes
-  const [generatedText, setGeneratedText] = useState("");
-
-  // useEffect(() => {}, [posts])
-
   const handleDateInput = (event) => {
-    setDate(event.target.value);
-  };
-
-  const handleInfoInput = (event) => {
-    setInfo(event.target.value);
+    setDateInput(event.target.value);
   };
 
   const handleKeyDown = async (e) => {
     if (e.key === "Enter") {
-      fetchGeneratedText();
+      generatePosts();
     }
   };
 
   // Send the prompt to the API and set the generated text
-  const fetchGeneratedText = async () => {
-    console.log("date ===> ", date);
-    console.log("info ===> ", info);
+  const generatePosts = async () => {
     setIsLoading(true);
-    console.log(userInput);
     try {
       const response = await fetch("/api/completion", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ date, companyInfo, companyReviews }),
+        body: JSON.stringify({ date: dateInput, companyInfo, companyReviews }),
       });
-
       const data = await response.json();
-      console.log("data", data);
-      console.log("data.message", data.message);
-      console.log("data.message.posts ===> ", data.message.posts);
-      setPosts(data.message.posts)
-      console.log("posts ====> ", posts);
-
-      setGeneratedText(data.message);
-      setUserInput("");
+      setPosts(data.message.posts);
       setIsLoading(false);
     } catch (error) {
-      setGeneratedText(error.message);
+      throw new Error();
     }
   };
 
-  const postsToDisplay = posts.map((post) => {
+  const postsToDisplay = posts.map((post, index) => {
     return (
-      <div>
-        <p>{post.date}</p>
-        <p>{post.title}</p>
-        <p>{post.description}</p>
-      </div>
-    )
-  })
+      <Box
+        my={2}
+        p={2}
+        border={"1px solid gray"}
+        borderRadius={"6px"}
+        key={index}
+      >
+        <Typography
+          variant="h6"
+          component="h2"
+          color="textSecondary"
+          gutterBottom
+        >
+          {post.date}
+        </Typography>
+        <Typography variant="h4" component="h1" color="primary" gutterBottom>
+          {post.title}
+        </Typography>
+        <Typography
+          variant="body1"
+          component="p"
+          color="textSecondary"
+          gutterBottom
+        >
+          {post.description}
+        </Typography>
+      </Box>
+    );
+  });
 
   return (
     <Container
@@ -105,43 +102,46 @@ export default function Page() {
         gutterBottom
         sx={{ textAlign: "center", marginTop: "8px", fontWeight: "bold" }}
       >
-        Single Completion Example
+        Social Media Generator
       </Typography>
 
       <TextField
         fullWidth
-        placeholder="Put the date"
-        value={date}
+        placeholder="Enter the date"
+        value={dateInput}
         type="date"
         onChange={handleDateInput}
         onKeyDown={handleKeyDown}
       />
 
-      <TextField
-        fullWidth
-        placeholder="Put your company info"
-        value={info}
-        onChange={handleInfoInput}
-        onKeyDown={handleKeyDown}
-      />
-
-      <Button onClick={() => fetchGeneratedText()}>Submit</Button>
-
-      <Paper
-        variant="outlined"
+      <Button
         sx={{
-          mt: 2,
-          p: 1,
-          borderRadius: "10px 10px 5px 10px",
+          background: "#1876d2",
+          border: 0,
+          borderRadius: "6px",
+          color: "white",
+          height: 48,
+          padding: "0 30px",
+          marginTop: "8px",
         }}
+        onClick={() => generatePosts()}
       >
-        {isLoading && <LinearProgress />}
-        {/* {postsToDisplay} */}
-        {posts.length === 0 ? <></> : postsToDisplay}
+        Submit
+      </Button>
 
-        <Typography variant="h6">Generated Text:</Typography>
-        {/* <ReactMarkdown>{generatedText}</ReactMarkdown> */}
-      </Paper>
+      {isLoading && (
+        <Paper
+          variant="outlined"
+          sx={{
+            mt: 2,
+            p: 1,
+            borderRadius: "10px 10px 5px 10px",
+          }}
+        >
+          <LinearProgress />
+        </Paper>
+      )}
+      {posts.length === 0 ? <></> : postsToDisplay}
     </Container>
   );
 }
