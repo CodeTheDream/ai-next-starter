@@ -12,7 +12,7 @@ export async function POST(req) {
     const messages: OpenAI.ChatCompletionMessageParam[] = [
       {
         role: 'user',
-        content: `Generate a JSON response that has an array of 3 social media post objects based on ${companyInfo} and ${companyReviews}. Each object needs to have a date, title, description. Make sure every object falls under the following TypeScript 'Response' interface: { post: [ post: { date is ${date}, title, description } ] }`,
+        content: `Generate a JSON response that has an array of 3 social media post objects based on ${companyInfo} and ${companyReviews}. Each object needs to have a date, title, description. JSON example: { posts: [ {date: "2023-11-01", title: 'Post title', description: 'Post description' }`,
       }
     ];
 
@@ -31,9 +31,11 @@ export async function POST(req) {
     console.log("after completion");
 
     console.log("completion.choices[0].message.content =====> ", completion.choices[0].message.content);
+    const responseText = completion.choices[0].message.content;
+    const responseTextJSON: Response = JSON.parse(responseText ?? '');
 
     return NextResponse.json({
-      message: completion.choices[0].message.content,
+      message: responseTextJSON,
     },
     {
       status: 200,
